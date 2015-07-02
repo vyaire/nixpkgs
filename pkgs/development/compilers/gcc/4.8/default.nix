@@ -64,6 +64,9 @@ let version = "4.8.3";
     patches = [ ./bug-61801.patch ]
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional (cross != null) ./libstdc++-target.patch
+      ++ optional (cross != null) ./gcc-1-mingw-float.patch
+      ++ optional (cross != null) ./gcc-2-darwin-no-pie.patch
+      ++ optional (cross != null) ./gcc-3-intrinsics.patch
       ++ optional noSysDirs ./no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.

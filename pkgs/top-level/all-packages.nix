@@ -3102,8 +3102,7 @@ let
 
       # XXX: We have troubles cross-compiling libstdc++ on MinGW (see
       # <http://hydra.nixos.org/build/4268232>), so don't even try.
-      langCC = (crossSystem == null
-                || crossSystem.config != "i686-pc-mingw32");
+      langCC = true;
      });
     libc = libcCross;
     binutils = binutilsCross;
