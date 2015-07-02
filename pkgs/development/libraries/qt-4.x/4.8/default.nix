@@ -154,16 +154,8 @@ stdenv.mkDerivation rec {
       -no-svg
       -make qmake -make libs -nomake tools
       -nomake demos -nomake examples -nomake docs
-    '' + optionalString isMingw " -xplatform win32-g++-4.6";
-    patches = [];
-    preConfigure = ''
-      sed -i -e 's/ g++/ ${stdenv.cross.config}-g++/' \
-        -e 's/ gcc/ ${stdenv.cross.config}-gcc/' \
-        -e 's/ ar/ ${stdenv.cross.config}-ar/' \
-        -e 's/ strip/ ${stdenv.cross.config}-strip/' \
-        -e 's/ windres/ ${stdenv.cross.config}-windres/' \
-        mkspecs/win32-g++/qmake.conf
-    '';
+    '' + optionalString isMingw " -xplatform win32-g++ -device-option CROSS_COMPILE=${stdenv.cross.config}-";
+    patches = [./qfiledialog.patch];
 
     # I don't know why it does not install qmake
     postInstall = ''

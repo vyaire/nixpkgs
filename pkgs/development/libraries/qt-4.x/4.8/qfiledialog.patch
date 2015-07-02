@@ -1,0 +1,12 @@
+diff -Naur qt-everywhere-opensource-src-4.8.6-orig/src/gui/dialogs/qfiledialog.cpp qt-everywhere-opensource-src-4.8.6/src/gui/dialogs/qfiledialog.cpp
+--- qt-everywhere-opensource-src-4.8.6-orig/src/gui/dialogs/qfiledialog.cpp	2014-04-10 11:37:12.000000000 -0700
++++ qt-everywhere-opensource-src-4.8.6/src/gui/dialogs/qfiledialog.cpp	2015-07-02 10:11:37.325068165 -0700
+@@ -58,7 +58,7 @@
+ #include <qdebug.h>
+ #include <qapplication.h>
+ #include <qstylepainter.h>
+-#include <itemviews/qfileiconprovider_p.h>
++#include <private/qfileiconprovider_p.h>
+ #if !defined(Q_WS_WINCE) && !defined(Q_OS_SYMBIAN)
+ #include "ui_qfiledialog.h"
+ #else
