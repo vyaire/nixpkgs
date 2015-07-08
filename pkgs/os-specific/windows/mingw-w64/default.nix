@@ -26,6 +26,8 @@ stdenv.mkDerivation (rec {
     cd mingw-w64-libraries/winpthreads
   '';
 } else {
+  patches = [ ./epsilon.patch ];
+
   buildInputs = [ gccCross binutilsCross ];
 
   crossConfig = gccCross.crossConfig;
