@@ -57,12 +57,12 @@ let
     "--layout=${layout}"
     "variant=${variant}"
     "threading=${threading}"
-    "runtime-link=${runtime-link}"
-    "link=${link}"
     "${cflags}"
   ] ++ optional (variant == "release") "debug-symbols=off";
 
   nativeB2Flags = [
+    "runtime-link=${runtime-link}"
+    "link=${link}"
     "-sEXPAT_INCLUDE=${expat}/include"
     "-sEXPAT_LIBPATH=${expat}/lib"
   ] ++ optional (toolset != null) "toolset=${toolset}"
@@ -70,13 +70,20 @@ let
   nativeB2Args = concatStringsSep " " (genericB2Flags ++ nativeB2Flags);
 
   crossB2Flags = [
+    "target-os=windows"
+    "binary-format=pe"
+    "architecture=x86"
+    "runtime-link=static"
+    "link=static"
+    "threadapi=win32"
     "-sEXPAT_INCLUDE=${expat.crossDrv}/include"
     "-sEXPAT_LIBPATH=${expat.crossDrv}/lib"
+    "--ignore-site-config"
     "--user-config=user-config.jam"
     "toolset=gcc-cross"
     "--without-python"
   ];
-  crossB2Args = concatMapStringsSep " " (genericB2Flags ++ crossB2Flags);
+  crossB2Args = concatStringsSep " " (genericB2Flags ++ crossB2Flags);
 
   builder = b2Args: ''
     ./b2 ${b2Args}
@@ -160,7 +167,8 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" "lib" ];
 
   crossAttrs = rec {
-    buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
+    patches = [ ./boost-1-fixes.patch ];
+    buildInputs = [ expat.crossDrv zlib.crossDrv bzip2 ];
     # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
     # override them.
     propagatedBuildInputs = buildInputs;
@@ -170,7 +178,7 @@ stdenv.mkDerivation {
       export configureFlags="--without-icu ${concatStringsSep " " commonConfigureFlags}"
       set -x
       cat << EOF > user-config.jam
-      using gcc : cross : $crossConfig-g++ ;
+      using gcc : cross : $crossConfig-g++ : <rc>$crossConfig-windres <archiver>$crossConfig-ar <ranlib>$crossConfig-ranlib ;
       EOF
     '';
     buildPhase = builder crossB2Args;
