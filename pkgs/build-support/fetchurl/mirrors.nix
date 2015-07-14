@@ -30,14 +30,14 @@ rec {
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
     # mirror.
-    http://ftpmirror.gnu.org/
+    #http://ftpmirror.gnu.org/
 
-    http://ftp.nluug.nl/pub/gnu/
-    http://mirrors.kernel.org/gnu/
-    ftp://mirror.cict.fr/gnu/
-    ftp://ftp.cs.tu-berlin.de/pub/gnu/
-    ftp://ftp.chg.ru/pub/gnu/
-    ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/
+    #http://ftp.nluug.nl/pub/gnu/
+    #http://mirrors.kernel.org/gnu/
+    #ftp://mirror.cict.fr/gnu/
+    #ftp://ftp.cs.tu-berlin.de/pub/gnu/
+    #ftp://ftp.chg.ru/pub/gnu/
+    #ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/
 
     # This one is the master repository, and thus it's always up-to-date.
     http://ftp.gnu.org/pub/gnu/
