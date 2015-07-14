@@ -3,7 +3,7 @@ NIX_CROSS_LDFLAGS=""
 
 crossAddCVars () {
     if test -d $1/include; then
-        export NIX_CROSS_CFLAGS_COMPILE="$NIX_CROSS_CFLAGS_COMPILE -I$1/include"
+        export NIX_CROSS_CFLAGS_COMPILE="$NIX_CROSS_CFLAGS_COMPILE -isystem $1/include"
     fi
 
     if test -d $1/lib; then
