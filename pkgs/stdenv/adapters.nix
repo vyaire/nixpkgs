@@ -92,7 +92,7 @@ rec {
             # We should overwrite the input attributes in crossDrv, to overwrite
             # the defaults for only-native builds in the base stdenv
             crossDrv = if cross == null then nativeDrv else
-                stdenv.mkDerivation (args // {
+                pkgs.lib.makeOverridable stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
                     nativeBuildInputs = nativeBuildInputsDrvs
                       ++ nativeInputsFromBuildInputs
