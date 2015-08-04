@@ -46,6 +46,13 @@ rec {
          crossDrv = overrideDerivation drv.crossDrv f;
          nativeDrv = overrideDerivation drv.nativeDrv f;
        }
+       else { })
+      //
+      (if (drv ? debug && drv ? release)
+       then {
+         debug = overrideDerivation drv.debug f;
+         release = overrideDerivation drv.release f;
+       }
        else { }));
 
 
