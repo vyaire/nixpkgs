@@ -137,7 +137,7 @@ let
     version = "1.2.3";
     src = fetchurl {
       url = "https://github.com/luaforge/luazip/archive/0b8f5c958e170b1b49f05bc267bc0351ad4dfc44.zip";
-      sha256 = "beb9260d606fdd5304aa958d95f0d3c20be7ca0a2cff44e7b75281c138a76a50";
+      sha256 = "05jpfrn5q71i47apy2mspz1idikw91w7zz6aaky04lr5cmcbjcxg";
     };
     buildInputs = [ unzip zziplib ];
     patches = [ ../development/lua-modules/zip.patch ];
