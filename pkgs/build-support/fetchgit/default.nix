@@ -1,5 +1,5 @@
 {stdenv, git, cacert}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, fetchSubmodules ? true
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, leaveRoot ? false, fetchSubmodules ? true
 , name ? "git-export"
 }:
 
@@ -27,7 +27,10 @@
 
 assert md5 != "" || sha256 != "";
 
-stdenv.mkDerivation {
+let
+base = baseNameOf (stdenv.lib.removeSuffix "/" url);
+root = if ! leaveRoot then "" else stdenv.lib.removeSuffix ".git" base;
+fetchgit = stdenv.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
@@ -37,7 +40,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev leaveDotGit fetchSubmodules;
+  inherit url rev leaveDotGit leaveRoot fetchSubmodules;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ca-bundle.crt";
 
@@ -50,5 +53,6 @@ stdenv.mkDerivation {
     ];
 
   preferLocalBuild = true;
-}
-
+};
+in
+fetchgit // { outPath = "${fetchgit.outPath}/${root}"; }

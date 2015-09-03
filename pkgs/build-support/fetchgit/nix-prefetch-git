@@ -6,6 +6,7 @@ expHash=
 hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
+leaveRoot=$NIX_PREFETCH_GIT_LEAVE_ROOT
 fetchSubmodules=
 builder=
 
@@ -21,6 +22,12 @@ else
     leaveDotGit=true
 fi
 
+if test "$leaveRoot" != 1; then
+    leaveRoot=false
+else
+    leaveRoot=true
+fi
+
 
 argi=0
 argfun=""
@@ -34,6 +41,8 @@ for arg; do
             --deepClone) deepClone=true;;
             --no-deepClone) deepClone=false;;
             --leave-dotGit) leaveDotGit=true;;
+            --leave-root) leaveRoot=true;;
+            --no-leave-root) leaveRoot=false;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
             *)
@@ -68,6 +77,8 @@ Options:
       --deepClone     Clone submodules recursively.
       --no-deepClone  Do not clone submodules.
       --leave-dotGit  Keep the .git directories.
+      --leave-root    Keep root directory as the name of the repository
+      --no-leave-root Do not keep the root directory of the repository
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
 "
@@ -81,7 +92,14 @@ fi
 
 init_remote(){
     local url=$1
-    git init
+    local name=.
+    if "$leaveRoot"; then
+        local base=$(basename $url)
+        name=${base%.git}
+        clone_root="$name"
+    fi
+    git init $name
+    cd "$name"
     git remote add origin $url
     ( [ -n "$http_proxy" ] && git config http.proxy $http_proxy ) || true
 }
@@ -306,6 +324,9 @@ else
 
         # Add the downloaded file to the Nix store.
         finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
+        if "$leaveRoot"; then
+            finalPath="$finalPath/$clone_root"
+        fi
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
             echo "hash mismatch for URL \`$url'"
