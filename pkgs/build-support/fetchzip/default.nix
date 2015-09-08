@@ -39,6 +39,6 @@ lib.overrideDerivation (fetchurl ({
       mv $out/$fn/* "$out/"
       rmdir "$out/$fn"
     '';
-} // args))
+} // removeAttrs args [ "stripRoot" ]))
 # Hackety-hack: we actually need unzip hooks, too
 (x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
