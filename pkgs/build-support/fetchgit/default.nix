@@ -1,5 +1,6 @@
 {stdenv, git, cacert}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, leaveRoot ? false, fetchSubmodules ? true
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? deepClone, leaveRoot ? false
+, fetchSubmodules ? true, deepClone ? false
 , name ? "git-export"
 }:
 
@@ -26,6 +27,7 @@
 */
 
 assert md5 != "" || sha256 != "";
+assert deepClone -> leaveDotGit;
 
 let
 base = baseNameOf (stdenv.lib.removeSuffix "/" url);
@@ -40,7 +42,7 @@ fetchgit = stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev leaveDotGit leaveRoot fetchSubmodules;
+  inherit url rev leaveDotGit leaveRoot fetchSubmodules deepClone;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ca-bundle.crt";
 
