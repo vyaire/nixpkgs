@@ -1,7 +1,21 @@
-{stdenv, git, cacert}:
+{stdenv, git, cacert}: let
+  urlToName = url: rev: let
+    base = baseNameOf (stdenv.lib.removeSuffix "/" url);
+
+    matched = builtins.match "(.*).git" base;
+
+    matchedRev = builtins.match ".*/([^/]*)" rev;
+
+    short = builtins.substring 0 7 rev;
+
+    appendShort = if (builtins.match "[a-f0-9]*" rev) != null
+      then "-${short}"
+      else "-${if matchedRev == null then rev else baseNameOf rev}";
+  in "${if matched == null then base else builtins.head matched}${appendShort}";
+in
 {url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? deepClone, leaveRoot ? false
 , fetchSubmodules ? true, deepClone ? false
-, name ? "git-export"
+, name ? urlToName url rev
 }:
 
 /* NOTE:
