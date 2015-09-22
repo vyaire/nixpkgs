@@ -9,6 +9,7 @@ leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 leaveRoot=$NIX_PREFETCH_GIT_LEAVE_ROOT
 fetchSubmodules=
 builder=
+cloneRoot=
 
 if test -n "$deepClone"; then
     deepClone=true
@@ -93,13 +94,7 @@ fi
 init_remote(){
     local url=$1
     local name=.
-    if "$leaveRoot"; then
-        local base=$(basename $url)
-        name=${base%.git}
-        clone_root="$name"
-    fi
     git init $name
-    cd "$name"
     git remote add origin $url
     ( [ -n "$http_proxy" ] && git config http.proxy $http_proxy ) || true
 }
@@ -286,10 +281,15 @@ clone_user_rev() {
     fi
 }
 
+if "$leaveRoot"; then
+    base=$(basename $url)
+    cloneRoot=${base%.git}
+fi
+
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage
-    mkdir $out
-    clone_user_rev "$out" "$url" "$rev"
+    mkdir -p "$out/$cloneRoot"
+    clone_user_rev "$out/$cloneRoot" "$url" "$rev"
 else
     if test -z "$hashType"; then
         hashType=sha256
@@ -313,10 +313,10 @@ else
         trap "rm -rf \"$tmpPath\"" EXIT
 
         tmpFile="$tmpPath/git-export"
-        mkdir "$tmpFile"
+        mkdir -p "$tmpFile/$cloneRoot"
 
         # Perform the checkout.
-        clone_user_rev "$tmpFile" "$url" "$rev"
+        clone_user_rev "$tmpFile/$cloneRoot" "$url" "$rev"
 
         # Compute the hash.
         hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
@@ -325,7 +325,7 @@ else
         # Add the downloaded file to the Nix store.
         finalPath=$(nix-store --add-fixed --recursive "$hashType" $tmpFile)
         if "$leaveRoot"; then
-            finalPath="$finalPath/$clone_root"
+            finalPath="$finalPath/$cloneRoot"
         fi
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
