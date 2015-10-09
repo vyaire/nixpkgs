@@ -56,7 +56,7 @@ fetchgit = stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev leaveDotGit leaveRoot fetchSubmodules deepClone;
+  inherit url rev leaveDotGit leaveRoot fetchSubmodules deepClone root;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ca-bundle.crt";
 
