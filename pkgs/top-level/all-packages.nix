@@ -317,7 +317,7 @@ let
     inherit fetchgit writeScript openssh stdenv;
   };
 
-  fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
+  fetchgitrevision = import ../build-support/fetchgitrevision runCommand gitMinimal;
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
 
