@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hsb2hs";
-  version = "0.2";
-  sha256 = "013n3l80449wxmbfmcidg8mdjk4nkxv7s3jcbfy5g4jps6gsg1fx";
+  version = "0.3.1";
+  sha256 = "8ad800820554f273ada083dfce2f463d920fb1ceb053255023a4c883b090f9d8";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ filepath preprocessorTools ];

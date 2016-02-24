@@ -270,6 +270,8 @@ let
     nixpkgs_i686 = pkgsi686Linux;
   };
 
+  cmark = callPackage ../development/libraries/cmark { };
+
   dotnetenv = import ../build-support/dotnetenv {
     inherit stdenv;
     dotnetfx = dotnetfx40;
