@@ -259,4 +259,6 @@ let
       license = stdenv.lib.licenses.mit;
     };
   };
-}; in self
+}; in with stdenv.lib;
+filterAttrs (name: value: !(isAttrs value && hasAttr "disabled" value && value.disabled))
+            self
