@@ -150,8 +150,8 @@ let
   luastdlib = buildLuaPackage {
     name = "stdlib";
     src = fetchurl {
-      url = "https://github.com/lua-stdlib/lua-stdlib/archive/release-v40.zip";
-      sha256 = "1nfn0gj44fgzpbr8yragwll0m891ilza7x261qdl2pc1s60zcdv6";
+      url = "https://github.com/lua-stdlib/lua-stdlib/archive/release-v41.2.0.zip";
+      sha256 = "1sby2hpycdx7mk21pxph4rzwn2ibhdl594dxyarx68v4g7rw4609";
     };
     buildInputs = [ unzip ];
     meta = {
