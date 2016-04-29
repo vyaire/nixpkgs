@@ -10,7 +10,7 @@ in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
   luaversion = "5.2";
-  version = "${luaversion}.3";
+  version = "${luaversion}.4";
 
   src = fetchurl {
     url = "http://www.lua.org/ftp/${name}.tar.gz";
