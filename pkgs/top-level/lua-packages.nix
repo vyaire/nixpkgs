@@ -217,10 +217,10 @@ let
 
   lpeg = buildLuaPackage rec {
     name = "lpeg-${version}";
-    version = "0.12";
+    version = "1.0.0";
     src = fetchurl {
       url = "http://www.inf.puc-rio.br/~roberto/lpeg/${name}.tar.gz";
-      sha256 = "0xlbfw1w7l65a5qhnx5sfw327hkq1zcj8xmg4glfw6fj9ha4b9gg";
+      sha256 = "13mz18s359wlkwm9d9iqlyyrrwjc6iqfpa99ai0icam2b3khl68h";
     };
     buildInputs = [ unzip ];
 
