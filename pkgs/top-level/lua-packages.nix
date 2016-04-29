@@ -12,6 +12,7 @@
 let
   isLua51 = lua.luaversion == "5.1";
   isLua52 = lua.luaversion == "5.2";
+  isLua53 = lua.luaversion == "5.3";
   self = _self;
   _self = with self; {
   inherit (stdenv.lib) maintainers;
@@ -42,6 +43,8 @@ let
       install -p bit.so $out/lib/lua/${lua.luaversion}
     '';
 
+    disabled = isLua53;
+
     meta = {
       homepage = "http://bitop.luajit.org";
       maintainers = with maintainers; [ flosse ];
@@ -64,7 +67,9 @@ let
         LUA_LDIR="$out/share/lua/${lua.luaversion}"
         LUA_INC="-I${lua}/include" LUA_CDIR="$out/lib/lua/${lua.luaversion}"
         EXPAT_INC="-I${expat}/include");
-    '';
+    '' + (stdenv.lib.optionalString (isLua53) ''
+      makeFlagsArray+=(CFLAGS="-std=c99");
+    '');
 
     meta = {
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
@@ -138,8 +143,8 @@ let
     };
     buildInputs = [ unzip zziplib ];
     patches = [ ../development/lua-modules/zip.patch ];
-    # does not currently work under lua 5.2
-    disabled = isLua52;
+    # does not currently work under lua 5.2 or lua 5.3
+    disabled = isLua52 || isLua53;
     meta = {
       homepage = "https://github.com/luaforge/luazip";
       hydraPlatforms = stdenv.lib.platforms.linux;
@@ -207,6 +212,8 @@ let
     buildInputs = [ unzip sqlite ];
 
     patches = [ ../development/lua-modules/luasql.patch ];
+
+    disabled = isLua53;
 
     meta = {
       homepage = "https://github.com/LuaDist/luasql-sqlite3";

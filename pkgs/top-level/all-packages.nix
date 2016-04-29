@@ -4019,11 +4019,16 @@ let
   lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
     compat = true;
   };
+  lua5_3 = callPackage ../development/interpreters/lua-5/5.3.nix { };
+  lua5_3_compat = callPackage ../development/interpreters/lua-5/5.3.nix {
+    compat = true;
+  };
   lua5 = lua5_2_compat;
   lua = lua5;
 
   lua51Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_1; });
   lua52Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_2; });
+  lua53Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_3; });
 
   luaPackages = lua52Packages;
 
