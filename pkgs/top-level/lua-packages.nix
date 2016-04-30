@@ -163,16 +163,16 @@ let
 
   lrexlib = buildLuaPackage rec {
     name = "lrexlib-${version}";
-    version = "2.7.2";
+    version = "2.8.0";
     src = fetchurl {
-      url = "https://github.com/rrthomas/lrexlib/archive/150c251be57c4e569da0f48bf6b01fbca97179fe.zip";
-      sha256 = "0i5brqbykc2nalp8snlq1r0wmf8y2wqp6drzr2xmq5phvj8913xh";
+      url = "https://github.com/rrthomas/lrexlib/archive/rel-2-8-0.zip";
+      sha256 = "080h0p3sqvx3ycy03gvf1kg0q8z0qj6057sr1dba8p88qad67sp4";
     };
     buildInputs = [ unzip luastdlib pcre luarocks oniguruma gnulib tre glibc ];
 
-    buildPhase = let
-      luaVariable = "LUA_PATH=${luastdlib}/share/lua/${lua.luaversion}/?.lua";
+    LUA_PATH = "${luastdlib}/share/lua/${lua.luaversion}/?.lua;${luastdlib}/share/lua/${lua.luaversion}/?/init.lua";
 
+    buildPhase = let
       pcreVariable = "PCRE_DIR=${pcre}";
       onigVariable = "ONIG_DIR=${oniguruma}";
       gnuVariable = "GNU_INCDIR=${gnulib}/lib";
@@ -181,7 +181,7 @@ let
     in ''
       sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' \
           -i Makefile
-      ${luaVariable} make
+      make
     '';
 
     installPhase = ''
