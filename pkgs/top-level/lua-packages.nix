@@ -74,10 +74,10 @@ let
   };
 
   luafilesystem = buildLuaPackage rec {
-    name = "filesystem-1.6.2";
+    name = "filesystem-1.6.3";
     src = fetchurl {
-      url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
-      sha256 = "1n8qdwa20ypbrny99vhkmx8q04zd2jjycdb5196xdhgvqzk10abz";
+      url = "https://github.com/keplerproject/luafilesystem/archive/v_1_6_3.tar.gz";
+      sha256 = "0s10ckxin0bysd6gaywqhxkpw3ybjhprr8m655b8cx3pxjwd49am";
     };
     meta = {
       homepage = "https://github.com/keplerproject/luafilesystem";
