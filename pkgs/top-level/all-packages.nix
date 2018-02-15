@@ -319,6 +319,10 @@ let
     inherit fetchgit writeScript openssh stdenv;
   };
 
+  fetchgithub = import ../build-support/fetchgithub {
+    inherit fetchgit writeScript writeText openssh stdenv;
+  };
+
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand gitMinimal;
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
